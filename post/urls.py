@@ -25,7 +25,7 @@ urlpatterns = [
     ),
     # 댓글 목록 조회
     path(
-        "posts/<int:post_pk>/comments",
+        "posts/<int:post_pk>/comments/",
         views.CommentViewSet.as_view(
             {
                 "get": "list",
