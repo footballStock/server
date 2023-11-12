@@ -8,6 +8,7 @@ urlpatterns = [
         views.PostViewSet.as_view(
             {
                 "get": "list",
+                "post": "create",
             }
         ),
     ),
@@ -17,7 +18,6 @@ urlpatterns = [
         views.PostViewSet.as_view(
             {
                 "get": "retrieve",
-                "post": "create",
                 "put": "update",
                 "delete": "destroy",
             }
@@ -29,16 +29,15 @@ urlpatterns = [
         views.CommentViewSet.as_view(
             {
                 "get": "list",
+                "post": "create",
             }
         ),
     ),
-    # 댓글 생성, 수정, 삭제
     path(
         "comments/<int:pk>/",
         views.CommentViewSet.as_view(
             {
                 "get": "retrieve",
-                "post": "create",
                 "put": "update",
                 "delete": "destroy",
             }
