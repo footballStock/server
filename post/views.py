@@ -1,5 +1,9 @@
 from rest_framework import generics, viewsets, status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (
+    IsAuthenticatedOrReadOnly,
+    IsAuthenticated,
+    AllowAny,
+)
 from rest_framework.exceptions import PermissionDenied
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
@@ -59,7 +63,13 @@ class PostViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes_by_action = {
+        "create": [IsAuthenticated],
+        "update": [IsAuthenticated],
+        "destroy": [IsAuthenticated],
+        "list": [AllowAny],  # 인증이 필요하지 않은 권한으로 설정
+        "retrieve": [AllowAny],  # 인증이 필요하지 않은 권한으로 설정
+    }
 
     # 특정 Post에 달린 댓글 목록 조회
     def list(self, request, *args, **kwargs):
