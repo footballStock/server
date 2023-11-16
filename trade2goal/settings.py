@@ -49,19 +49,12 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES": [
-#         "rest_framework.permissions.IsAuthenticated",
-#     ],
-#     "DEFAULT_AUTHENTICATION_CLASSES": [
-#         "rest_framework.authentication.SessionAuthentication",
-#         "rest_framework.authentication.BasicAuthentication",
-#     ],
-# }
-
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",  # 모든 사용자에게 접근을 허용합니다.
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "accounts.authentication.FirebaseAuthentication",
     ],
 }
 

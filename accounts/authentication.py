@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 import firebase_admin
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from firebase_admin import auth
 from firebase_admin import credentials
@@ -37,7 +37,7 @@ default_app = firebase_admin.initialize_app(cred)
 
 class FirebaseAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        auth_header = request.META.get("HTTP_AUTHORIZATION")
+        auth_header = request.headers.get("Authorization")
         if not auth_header:
             raise NoAuthToken("No auth token provided")
 
@@ -57,7 +57,8 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
         except Exception:
             raise FirebaseError()
 
+        User = get_user_model()
         user, created = User.objects.get_or_create(firebase_uid=uid)
-        user.profile.last_activity = timezone.localtime()
+        # user.profile.last_activity = timezone.localtime()
 
         return (user, None)

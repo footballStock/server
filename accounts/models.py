@@ -24,3 +24,9 @@ class User(AbstractUser):
         blank=True,
         verbose_name="이름",
     )
+
+    def __str__(self):
+        return self.nickname
+
+    class Meta:
+        verbose_name_plural = "User"
