@@ -1,6 +1,13 @@
 from rest_framework import generics, viewsets, status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (
+    IsAuthenticatedOrReadOnly,
+    IsAuthenticated,
+    AllowAny,
+)
 from rest_framework.exceptions import PermissionDenied
+
+from accounts.models import User
+
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.response import Response
@@ -10,7 +17,6 @@ from rest_framework.response import Response
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
     # 전체 Post 목록 조회
     def list(self, request, *args, **kwargs):
@@ -26,9 +32,14 @@ class PostViewSet(viewsets.ModelViewSet):
 
     # 새로운 Post 등록
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        print(request.user.id)
+        new_post = Post.objects.create(
+            author=request.user,
+            title=request.data["title"],
+            content=request.data["content"],
+        )
+        new_post.save()
+        serializer = PostSerializer(new_post)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     # 기존의 Post 수정
@@ -59,7 +70,13 @@ class PostViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes_by_action = {
+        "create": [IsAuthenticated],
+        "update": [IsAuthenticated],
+        "destroy": [IsAuthenticated],
+        "list": [AllowAny],  # 인증이 필요하지 않은 권한으로 설정
+        "retrieve": [AllowAny],  # 인증이 필요하지 않은 권한으로 설정
+    }
 
     # 특정 Post에 달린 댓글 목록 조회
     def list(self, request, *args, **kwargs):

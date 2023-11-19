@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "chat",
     "post",
     "team_info",
+    "accounts",
     "daphne",
     "channels",
     "django.contrib.admin",
@@ -45,23 +46,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "corsheaders",
 ]
-
-# REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES": [
-#         "rest_framework.permissions.IsAuthenticated",
-#     ],
-#     "DEFAULT_AUTHENTICATION_CLASSES": [
-#         "rest_framework.authentication.SessionAuthentication",
-#         "rest_framework.authentication.BasicAuthentication",
-#     ],
-# }
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",  # 모든 사용자에게 접근을 허용합니다.
     ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "accounts.authentication.FirebaseAuthentication",
+    ],
 }
 
 MIDDLEWARE = [
@@ -72,6 +66,23 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000",
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",  # 인증 헤더 추가
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
 
 ROOT_URLCONF = "trade2goal.urls"
@@ -106,6 +117,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = "accounts.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
