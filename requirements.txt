@@ -16,7 +16,6 @@ daphne==4.0.0
 Django==4.2.6
 django-cors-headers==4.3.0
 djangorestframework==3.14.0
-djangorestframework-jwt==1.11.0
 firebase-admin==6.2.0
 google-api-core==2.14.0
 google-api-python-client==2.107.0
@@ -45,7 +44,6 @@ protobuf==4.25.0
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pycparser==2.21
-PyJWT==1.5.2
 pyOpenSSL==23.3.0
 pyparsing==3.1.1
 python-dotenv==1.0.0

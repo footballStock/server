@@ -16,7 +16,7 @@ class FirebaseLoginSignupView(APIView):
             )
         except:
             uid = request.auth.get("uid")
-            user, created = User.objects.get_or_create(firebase_uid=uid)
+            user, created = User.objects.get_or_create(username=uid)
             return Response(
                 {"message": "Login successful."}, status=status.HTTP_200_OK
             )

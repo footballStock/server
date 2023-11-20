@@ -17,7 +17,7 @@ def get_user(headers):
         firebase_token = headers.get(b"authorization").decode().split()[1]
         decoded_token = auth.verify_id_token(firebase_token)
         user_uid = decoded_token.get("uid")
-        user = User.objects.get(firebase_uid=user_uid)
+        user = User.objects.get(username=user_uid)
         return user
     except User.DoesNotExist:
         return AnonymousUser()

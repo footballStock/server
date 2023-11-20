@@ -2,9 +2,8 @@ from channels.generic.websocket import WebsocketConsumer
 from channels.db import database_sync_to_async
 
 from asgiref.sync import async_to_sync
-from chat.serializers import ChatRoomSerializer, ChatsSerializer
 
-from .models import ChatRoom, Chats
+from .models import ChatRoom, Message
 
 from accounts.models import User
 import json
@@ -50,7 +49,7 @@ class ChatConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
         user = text_data_json["user"]
-        timestamp = text_data_json["timestamp"]
+        timestamp = datetime.datetime.now()
 
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -58,7 +57,7 @@ class ChatConsumer(WebsocketConsumer):
                 "type": "chat_message",
                 "message": message,
                 "user": user,
-                "timestamp": timestamp,
+                "timestamp": timestamp.strftime("%Y-%m-%dT%H:%M:%S.%f"),
             },
         )
 

@@ -58,7 +58,7 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
             raise FirebaseError()
 
         User = get_user_model()
-        user, created = User.objects.get_or_create(firebase_uid=uid)
+        user, created = User.objects.get_or_create(username=uid)
         # user.profile.last_activity = timezone.localtime()
 
         return (user, None)

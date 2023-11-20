@@ -12,7 +12,13 @@ def random_name():
 
 
 class User(AbstractUser):
-    firebase_uid = models.CharField(max_length=128, blank=True, null=True)
+
+    def profile_directory_path(instance, filename):
+        file = os.path.splitext(filename)[0]
+        extension = os.path.splitext(filename)[1]
+        return f'profile/{instance.nickname}_profile_{datetime.datetime.now().strftime("%Y_%m_%dT%H%M")}{extension}'
+    
+    username = models.CharField(max_length=128, unique = True)
     nickname = models.CharField(
         max_length=50,
         default=random_name,
@@ -23,6 +29,14 @@ class User(AbstractUser):
         max_length=15,
         blank=True,
         verbose_name="이름",
+    )
+    profile = models.ImageField(
+        upload_to=profile_directory_path,
+        height_field=None,  # [TODO] Edit it
+        width_field=None,
+        blank=True,
+        default='profile/default.png',
+        verbose_name="프로필 사진",
     )
 
     def __str__(self):

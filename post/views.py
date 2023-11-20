@@ -3,6 +3,7 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
     IsAuthenticated,
     AllowAny,
+    BasePermission
 )
 from rest_framework.exceptions import PermissionDenied
 
@@ -13,26 +14,38 @@ from .serializers import PostSerializer, CommentSerializer
 from rest_framework.response import Response
 
 
-# Post 목록 조회와 생성 API
+class IsAuthenticatedOrReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        if request.method in ('GET', 'HEAD', 'OPTIONS'):
+            return True
+        return request.user and request.user.is_authenticated
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes_by_action = {
+        "create": [IsAuthenticated],
+        "update": [IsAuthenticated],
+        "destroy": [IsAuthenticated],
+        "list": [AllowAny], 
+        "retrieve": [AllowAny], 
+    }
+    authentication_classes = []
 
-    # 전체 Post 목록 조회
+    def get_permissions(self):
+        return [permission() for permission in self.permission_classes_by_action.get(self.action, [])]
+
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    # 특정 Post 정보 가져오기
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    # 새로운 Post 등록
     def create(self, request, *args, **kwargs):
-        print(request.user.id)
         new_post = Post.objects.create(
             author=request.user,
             title=request.data["title"],
@@ -42,7 +55,6 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(new_post)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    # 기존의 Post 수정
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -54,7 +66,6 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data)
 
-    # 기존의 Post 삭제
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.author != self.request.user:
@@ -63,7 +74,6 @@ class PostViewSet(viewsets.ModelViewSet):
             )
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
     # Comment 목록 조회와 생성 API
 
 
