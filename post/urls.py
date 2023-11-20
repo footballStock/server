@@ -12,6 +12,14 @@ urlpatterns = [
         ),
     ),
     path(
+        "posts/top3/",
+        views.PostViewSet.as_view(
+            {
+                "get": "top3post",
+            }
+        ),
+    ),
+    path(
         "posts/<int:pk>/",
         views.PostViewSet.as_view(
             {
