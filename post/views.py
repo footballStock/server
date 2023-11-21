@@ -53,8 +53,6 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer_data = self.get_serializer(
             instance,
         ).data
-        serializer_data["likes_count"] = instance.likes.count()
-        serializer_data["dislikes_count"] = instance.dislikes.count()
         serializer_data["like"] = like
         serializer_data["dislike"] = dislike
         return Response(serializer_data)
@@ -74,8 +72,10 @@ class PostViewSet(viewsets.ModelViewSet):
             image=request.FILES["image"],
         )
         new_post.save()
-        serializer = PostSerializer(new_post)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer_data = serializer_data = self.get_serializer(
+            new_post,
+        ).data
+        return Response(serializer_data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
         post = self.get_object()
@@ -87,10 +87,10 @@ class PostViewSet(viewsets.ModelViewSet):
         post.content = request.data["content"]
         post.image = request.FILES["image"]
         post.save()
-        response_data = self.get_serializer(
+        serializer_data = self.get_serializer(
             post,
         ).data
-        return Response(response_data)
+        return Response(serializer_data)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -118,8 +118,6 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer_data = self.get_serializer(
             post,
         ).data
-        serializer_data["likes_count"] = post.likes.count()
-        serializer_data["dislikes_count"] = post.dislikes.count()
         serializer_data["like"] = like
         serializer_data["dislike"] = dislike
         return Response(serializer_data)
@@ -141,8 +139,6 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer_data = self.get_serializer(
             post,
         ).data
-        serializer_data["likes_count"] = post.likes.count()
-        serializer_data["dislikes_count"] = post.dislikes.count()
         serializer_data["like"] = like
         serializer_data["dislike"] = dislike
         return Response(serializer_data)
