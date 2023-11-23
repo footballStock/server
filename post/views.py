@@ -12,6 +12,7 @@ from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.response import Response
 from django.db.models import Count
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 class IsAuthenticatedOrReadOnly(BasePermission):
@@ -35,8 +36,21 @@ class PostViewSet(viewsets.ModelViewSet):
     }
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
+        queryset = self.get_queryset().order_by("-created_at")
+        page = request.GET.get("page")
+
+        paginator = Paginator(queryset, 10)
+
+        try:
+            page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            page = 1
+            page_obj = paginator.page(page)
+        except EmptyPage:
+            page = paginator.num_pages
+            page_obj = paginator.page(page)
+
+        serializer = self.get_serializer(page_obj, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
@@ -159,8 +173,21 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         post_id = self.kwargs.get("post_pk")
-        queryset = self.queryset.filter(post_id=post_id)
-        serializer = CommentSerializer(queryset, many=True)
+        queryset = self.queryset.filter(post_id=post_id).order_by("-created_at")
+        page = request.GET.get("page")
+
+        paginator = Paginator(queryset, 10)
+
+        try:
+            page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            page = 1
+            page_obj = paginator.page(page)
+        except EmptyPage:
+            page = paginator.num_pages
+            page_obj = paginator.page(page)
+
+        serializer = self.get_serializer(page_obj, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
