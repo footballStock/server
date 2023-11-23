@@ -9,14 +9,16 @@ class FirebaseLoginSignupView(APIView):
     authentication_classes = [FirebaseAuthentication]
 
     def get(self, request):
-        try:
-            user = request.user
-            return Response(
-                {"message": "Login successful"}, status=status.HTTP_200_OK
-            )
-        except:
-            uid = request.auth.get("uid")
-            user, created = User.objects.get_or_create(username=uid)
-            return Response(
-                {"message": "Login successful."}, status=status.HTTP_200_OK
-            )
+        uid = request.auth.get("uid")
+        user, created = User.objects.get_or_create(username=uid)
+        profile_data = {
+            "src": user.profile.url if user.profile else "",
+            "alt": user.nickname if user.nickname else "",
+        }
+
+        response_data = {
+            "profile": profile_data,
+            "nickname": user.nickname if user.nickname else "",
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
