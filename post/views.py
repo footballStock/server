@@ -51,12 +51,16 @@ class PostViewSet(viewsets.ModelViewSet):
             page_obj = paginator.page(page)
 
         serializer = self.get_serializer(page_obj, many=True)
-        return Response(serializer.data)
+        response_data = {
+            "num_pages": paginator.num_pages,
+            "posts": serializer.data,
+        }
+        return Response(response_data)
 
     def retrieve(self, request, *args, **kwargs):
         user = request.user
         instance = self.get_object()
-        if user in instance.dislikes.all():
+        if user in instance.likes.all():
             like = True
         else:
             like = False

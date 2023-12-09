@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import StockOverviewList
+from .views import StockOverviewList, TeamInfoViewSet
 
 urlpatterns = [
     path(
@@ -7,5 +7,12 @@ urlpatterns = [
         StockOverviewList.as_view(),
         name="stock-overview-list",
     ),
-    # 다른 URL 패턴들을 여기에 추가할 수 있습니다.
+    path(
+        "teams/",
+        TeamInfoViewSet.as_view(
+            {
+                "get": "retrieve",
+            }
+        ),
+    ),
 ]

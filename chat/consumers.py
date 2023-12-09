@@ -23,11 +23,14 @@ def get_room(room_id):
         return None
 
 
-@database_sync_to_async
 def get_user(user_id):
     user = User.objects.get(id=user_id)
     return user
 
+def save_message(room, user, message, timestamp):
+    user = User.objects.get(nickname=user["nickname"])
+    new_message = Message(room_id=room, sender=user, content=message, timestamp=timestamp)
+    new_message.save()
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -47,28 +50,28 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        content = text_data_json["content"]
         user = text_data_json["user"]
         timestamp = datetime.datetime.now()
-
+        save_message(self.room_name, user, content, timestamp)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 "type": "chat_message",
-                "message": message,
+                "content": content,
                 "user": user,
                 "timestamp": timestamp.strftime("%Y-%m-%dT%H:%M:%S.%f"),
             },
         )
 
     def chat_message(self, event):
-        message = event["message"]
+        content = event["content"]
         user = event["user"]
         timestamp = event["timestamp"]
 
         self.send(
             text_data=json.dumps(
-                {"message": message, "user": user, "timestamp": timestamp}
+                {"content": content, "user": user, "timestamp": timestamp}
             )
         )
 

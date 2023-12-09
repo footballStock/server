@@ -3,6 +3,7 @@ from .models import Post, Comment
 
 
 class PostSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     dislikes_count = serializers.SerializerMethodField()
@@ -13,6 +14,9 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_dislikes_count(self, obj):
         return obj.dislikes.count()
+
+    def get_author(self, obj):
+        return obj.author.nickname if obj.author else None
 
     def get_author_profile(self, obj):
         return obj.author.profile.url if obj.author else None
