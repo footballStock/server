@@ -16,7 +16,6 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -54,20 +53,20 @@ INSTALLED_APPS = [
     "django_celery_results",
 ]
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TAST_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Seoul'
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TAST_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "Asia/Seoul"
 
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",  # 모든 사용자에게 접근을 허용합니다.
+        "rest_framework.permissions.AllowAny",  # Allows access to any user.
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "accounts.authentication.FirebaseAuthentication",
+        "accounts.authentication.FirebaseAuthentication",  # Uses Firebase for authentication.
     ],
 }
 
@@ -89,7 +88,7 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
-    "authorization",  # 인증 헤더 추가
+    "authorization",  # Add Authorization header
     "content-type",
     "dnt",
     "origin",
@@ -171,7 +170,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-CSRF_COOKIE_SECURE = False  # HTTPS를 사용하지 않는 경우 False로 설정
+CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = None
 CSRF_TRUSTED_ORIGINS = ["http://3.34.252.170"]
 # Static files (CSS, JavaScript, Images)

@@ -161,8 +161,6 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer_data["dislike"] = dislike
         return Response(serializer_data)
 
-    # Comment 목록 조회와 생성 API
-
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()

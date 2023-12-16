@@ -3,9 +3,7 @@ from .models import Team, Stock, League, Player, Venue, News, SeasonData
 
 
 class StockOverviewSerializer(serializers.ModelSerializer):
-    team_name = serializers.CharField(
-        source="team.name", read_only=True
-    )  # Team 모델의 name 필드와 연결
+    team_name = serializers.CharField(source="team.name", read_only=True)
 
     class Meta:
         model = Stock
@@ -20,25 +18,30 @@ class StockOverviewSerializer(serializers.ModelSerializer):
             "volume",
         )
 
+
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
         fields = "__all__"
+
 
 class LeagueSerializer(serializers.ModelSerializer):
     class Meta:
         model = League
         fields = "__all__"
 
+
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = "__all__"
 
+
 class VenueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Venue
         fields = "__all__"
+
 
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
