@@ -2,7 +2,17 @@
 
 # Overview
 
-This project is a web server implemented using Django, featuring functionalities such as chat, account management, post management, and team information. It is characterized by user authentication through Firebase, real-time chat using Django Channels, scheduled news crawling with Celery, and secured communication with HTTPS.
+`Trade2goal` serves as a dynamic and comprehensive server for a football team stock website, designed to deliver up-to-date information on various football teams. It stands as a central hub for processing and distributing data, catering to the needs of football enthusiasts and stock market participants at the intersection of sports and finance. The server features a range of functionalities, including chat, account management, post management, and team information.
+
+### Key Aspects
+
+- **User Authentication**: Integrates Firebase for secure and reliable user authentication, ensuring data safety and user privacy.
+- **Real-Time Chat**: Utilizes Django Channels for real-time chat capabilities, allowing for interactive user communication and engagement.
+- **Scheduled News Crawling**: Employs Celery for automated news crawling, providing users with regular updates on football teams and stock-related news.
+- **Secure Communication**: Implements HTTPS to ensure all communication on the platform is encrypted and secure.
+
+`Trade2goal` is more than just a data provider; it is a multifaceted platform that combines the excitement of football with the intricacies of the stock market. Whether users are passionate about sports, interested in finance, or both, `Trade2goal` offers an engaging and informative experience.
+
 
 # Technology Stack
 
