@@ -14,6 +14,8 @@ This project is a web server implemented using Django, featuring functionalities
 - Gunicorn
 - Daphne
 - AWS EC2
+<img width="833" alt="image" src="https://github.com/footballStock/server/assets/64965613/8dc5ca20-2908-45a4-bb4b-2626e8e5f1bc">
+
 
 # Key Features
 
